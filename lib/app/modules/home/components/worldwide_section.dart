@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../shared/models/worldwide_model.dart';
+import '../cubits/worldwide/worldwide_cubit.dart';
 import '../widgets/count_card_widget.dart';
 
 class WorldwideSection extends StatelessWidget {
-  const WorldwideSection({Key key}) : super(key: key);
+  final _worldwideCubit = Modular.get<WorldwideCubit>();
+
+  WorldwideSection({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,42 +19,53 @@ class WorldwideSection extends StatelessWidget {
         children: <Widget>[
           _buildSectionTitle(),
           const SizedBox(height: 16),
-          _buildCountContent(),
+          CubitBuilder<WorldwideCubit, WorldwideState>(
+            cubit: _worldwideCubit,
+            builder: (_, state) {
+              return state.maybeWhen(
+                loadSuccess: (worldwide) => _buildCountContent(
+                  worldwide: worldwide,
+                ),
+                orElse: () => _buildCountContent(busy: true),
+              );
+            },
+          )
         ],
       ),
     );
   }
 
-  Widget _buildCountContent({bool busy = false}) {
+  Widget _buildCountContent({WorldwideModel worldwide, bool busy = false}) {
     return Wrap(
       children: <Widget>[
         CountCardWidget(
           busy: busy,
           title: "Confirmed",
-          today: 20000,
-          total: 2000000,
+          subTotal: worldwide?.todayCases,
+          total: worldwide?.cases,
         ),
         CountCardWidget(
           busy: busy,
           title: "Active",
-          today: 20000,
-          total: 2000000,
+          subTotalPrefix: "Critical: ",
+          subTotal: worldwide?.critical,
+          total: worldwide?.active,
           backgroundColor: Colors.cyan[100],
           foregroundColor: Colors.cyan[900],
         ),
         CountCardWidget(
           busy: busy,
           title: "Recovered",
-          today: 20000,
-          total: 2000000,
+          subTotal: worldwide?.todayRecovered,
+          total: worldwide?.recovered,
           backgroundColor: Colors.green[100],
           foregroundColor: Colors.green[900],
         ),
         CountCardWidget(
           busy: busy,
           title: "Deaths",
-          today: 20000,
-          total: 2000000,
+          subTotal: worldwide?.todayDeaths,
+          total: worldwide?.deaths,
           backgroundColor: Colors.red[100],
           foregroundColor: Colors.red[900],
         ),
@@ -71,7 +88,7 @@ class WorldwideSection extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () => _worldwideCubit.load(),
           icon: Icon(Icons.refresh),
         ),
       ],

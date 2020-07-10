@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'components/worldwide_section.dart';
+import 'cubits/worldwide/worldwide_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -11,6 +13,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _worldwideCubit = Modular.get<WorldwideCubit>();
+
+  @override
+  void initState() {
+    super.initState();
+    _worldwideCubit.load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.yellow[300],
             child: Text("These records are updated daily."),
           ),
-          const WorldwideSection(),
+          WorldwideSection(),
         ],
       ),
     );

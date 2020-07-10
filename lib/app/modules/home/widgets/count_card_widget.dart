@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CountCardWidget extends StatelessWidget {
-  final String title;
-  final double today, total;
+  final String title, subTotalPrefix;
+  final double subTotal, total;
   final bool busy;
   final Color backgroundColor, foregroundColor;
 
   const CountCardWidget({
     Key key,
     @required this.title,
-    @required this.today,
+    @required this.subTotal,
     @required this.total,
     this.backgroundColor,
     this.foregroundColor,
     this.busy = false,
+    this.subTotalPrefix = "+",
   })  : assert(title != null),
         super(key: key);
 
@@ -63,7 +64,7 @@ class CountCardWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          "+${_numberFormat(today)}",
+          "$subTotalPrefix${_numberFormat(subTotal)}",
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: foregroundColor ?? Colors.black,
