@@ -1,7 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'cubits/country_ranking/country_ranking_cubit.dart';
 import 'cubits/worldwide/worldwide_cubit.dart';
 import 'home_page.dart';
+import 'repositories/country_repository.dart';
 import 'repositories/worldwide_repository.dart';
 
 class HomeModule extends ChildModule {
@@ -9,6 +11,8 @@ class HomeModule extends ChildModule {
   List<Bind> get binds => [
         Bind((i) => WorldwideRepository(i())),
         Bind((i) => WorldwideCubit(i())),
+        Bind((i) => CountryRepository(i())),
+        Bind((i) => CountryRankingCubit(i())),
       ];
 
   @override

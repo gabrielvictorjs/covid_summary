@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../shared/models/worldwide_model.dart';
 import '../cubits/worldwide/worldwide_cubit.dart';
 import '../widgets/count_card_widget.dart';
+import '../widgets/section_title_widget.dart';
 
 class WorldwideSection extends StatelessWidget {
   final _worldwideCubit = Modular.get<WorldwideCubit>();
@@ -17,9 +18,13 @@ class WorldwideSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: <Widget>[
-          _buildSectionTitle(),
+          SectionTitleWidget(
+            title: "Worldwide",
+            padding: const EdgeInsets.only(left: 8),
+            reloadAction: _worldwideCubit.load,
+          ),
           const SizedBox(height: 16),
-          CubitBuilder<WorldwideCubit, WorldwideState>(
+          BlocBuilder<WorldwideCubit, WorldwideState>(
             cubit: _worldwideCubit,
             builder: (_, state) {
               return state.maybeWhen(
@@ -68,28 +73,6 @@ class WorldwideSection extends StatelessWidget {
           total: worldwide?.deaths,
           backgroundColor: Colors.red[100],
           foregroundColor: Colors.red[900],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSectionTitle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(
-            "Worldwide",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () => _worldwideCubit.load(),
-          icon: Icon(Icons.refresh),
         ),
       ],
     );
