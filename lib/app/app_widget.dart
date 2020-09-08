@@ -7,9 +7,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: Modular.navigatorKey,
-      title: 'Flutter Slidy',
+      title: 'Covid Summary',
       theme: ThemeData(
         primaryColor: Colors.blueGrey,
+        accentColor: Colors.blueGrey,
         textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
         ),

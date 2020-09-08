@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../shared/models/country_model.dart';
+import '../../../shared/widgets/custom_loading_widget.dart';
 import '../cubits/country_ranking/country_ranking_cubit.dart';
 import '../widgets/country_card_widget.dart';
 import '../widgets/section_title_widget.dart';
@@ -25,8 +26,8 @@ class CountryRanking extends StatelessWidget {
             cubit: _countryRankingCubit,
             builder: (_, state) {
               return state.when(
-                loadInProgress: () => Center(
-                  child: CircularProgressIndicator(),
+                loadInProgress: () => CustomLoadingWidget(
+                  margin: const EdgeInsets.only(top: 16),
                 ),
                 loadSuccess: _buildCountries,
                 loadFailure: () => Center(
